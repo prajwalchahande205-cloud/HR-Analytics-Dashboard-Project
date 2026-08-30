@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)file:///C:/Users/Prajwal/Desktop/index.html/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HR Analytics AI Assistant</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#eef2f7;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.chatbot{
+    width:450px;
+    max-width:100%;
+    height:700px;
+    background:white;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#172554,#2563eb);
+    color:white;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.bot-icon{
+    width:50px;
+    height:50px;
+    background:white;
+    color:#2563eb;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:25px;
+}
+
+.header h2{
+    font-size:19px;
+}
+
+.header p{
+    font-size:12px;
+    margin-top:4px;
+    opacity:.85;
+}
+
+/* FILE AREA */
+
+.file-area{
+    padding:12px 15px;
+    background:#f8fafc;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.file-label{
+    display:block;
+    background:#2563eb;
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+#csvFile{
+    display:none;
+}
+
+.status{
+    margin-top:8px;
+    font-size:12px;
+    text-align:center;
+    color:#64748b;
+}
+
+/* CHAT */
+
+.chat-area{
+    flex:1;
+    overflow-y:auto;
+    padding:16px;
+    background:#f8fafc;
+}
+
+.message{
+    max-width:85%;
+    padding:12px 15px;
+    margin-bottom:12px;
+    border-radius:16px;
+    font-size:14px;
+    line-height:1.55;
+    word-wrap:break-word;
+}
+
+.bot{
+    background:white;
+    border:1px solid #e2e8f0;
+    color:#1e293b;
+    border-bottom-left-radius:5px;
+}
+
+.user{
+    background:#2563eb;
+    color:white;
+    margin-left:auto;
+    border-bottom-right-radius:5px;
+}
+
+/* QUICK QUESTIONS */
+
+.quick{
+    display:flex;
+    gap:7px;
+    overflow-x:auto;
+    padding:10px;
+    background:white;
+    border-top:1px solid #e2e8f0;
+}
+
+.quick button{
+    white-space:nowrap;
+    border:1px solid #2563eb;
+    background:white;
+    color:#2563eb;
+    padding:8px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.quick button:hover{
+    background:#2563eb;
+    color:white;
+}
+
+/* INPUT */
+
+.input-area{
+    display:flex;
+    gap:8px;
+    padding:13px;
+    background:white;
+    border-top:1px solid #e2e8f0;
+}
+
+.input-area input{
+    flex:1;
+    min-width:0;
+    border:1px solid #cbd5e1;
+    border-radius:25px;
+    padding:13px 15px;
+    outline:none;
+    font-size:14px;
+}
+
+.input-area input:focus{
+    border-color:#2563eb;
+}
+
+.send{
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.send:hover{
+    background:#1d4ed8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="chatbot">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="bot-icon">🤖</div>
+
+        <div>
+            <h2>HR Analytics AI Assistant</h2>
+            <p>Ask questions about your HR dataset</p>
+        </div>
+
+    </div>
+
+
+    <!-- CSV UPLOAD -->
+
+    <div class="file-area">
+
+        <label class="file-label" for="csvFile">
+            📂 Choose HR CSV File
+        </label>
+
+        <input type="file" id="csvFile" accept=".csv,text/csv">
+
+        <div class="status" id="status">🟢 CSV Loaded Successfully • 1480 records</div>
+
+    </div>
+
+
+    <!-- CHAT -->
+
+    <div class="chat-area" id="chatArea">
+
+        <div class="message bot">
+
+            👋 Hello! I am your
+            <b>HR Analytics Assistant</b>.
+
+            <br><br>
+
+            First upload your HR CSV file.
+
+            <br><br>
+
+            Then you can ask questions like:
+
+            <br><br>
+
+            • Total employees?<br>
+            • Attrition rate?<br>
+            • Employees who left?<br>
+            • Average age?<br>
+            • Average monthly income?<br>
+            • Department-wise employees?<br>
+            • Highest attrition department?<br>
+            • Job-role wise employees?<br>
+            • Female employees?<br>
+            • Male employees?
+
+        </div>
+
+    <div class="message bot">✅ <b>HR CSV loaded successfully!</b><br><br>📊 Total records found: <b>1480</b><br><br>You can now ask questions about your HR data.</div><div class="message user">Total employees kitne hain?</div><div class="message bot">
+        👥 <b>Total Employees</b><br><br>
+
+        <b>1480</b> employees
+        </div></div>
+
+
+    <!-- QUICK QUESTIONS -->
+
+    <div class="quick">
+
+        <button onclick="askQuestion(&#39;Total employees kitne hain?&#39;)">
+            Employees
+        </button>
+
+        <button onclick="askQuestion(&#39;Attrition rate kya hai?&#39;)">
+            Attrition
+        </button>
+
+        <button onclick="askQuestion(&#39;Average age kitni hai?&#39;)">
+            Avg Age
+        </button>
+
+        <button onclick="askQuestion(&#39;Department wise employees batao&#39;)">
+            Departments
+        </button>
+
+        <button onclick="askQuestion(&#39;Average monthly income kitni hai?&#39;)">
+            Salary
+        </button>
+
+    </div>
+
+
+    <!-- INPUT -->
+
+    <div class="input-area">
+
+        <input type="text" id="question" placeholder="Ask your HR question..." onkeydown="if(event.key === &#39;Enter&#39;) sendMessage()">
+
+        <button class="send" onclick="sendMessage()">
+            ➤
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let hrData = [];
+
+let headers = [];
+
+let csvLoaded = false;
+
+
+/* =========================================================
+   CSV FILE UPLOAD
+========================================================= */
+
+document
+.getElementById("csvFile")
+.addEventListener("change", function(event){
+
+    const file = event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        try{
+
+            const csvText = e.target.result;
+
+            hrData = parseCSV(csvText);
+
+            if(hrData.length === 0){
+
+                throw new Error("CSV contains no records.");
+
+            }
+
+            headers = Object.keys(hrData[0]);
+
+            csvLoaded = true;
+
+            document.getElementById("status").innerHTML =
+                "🟢 CSV Loaded Successfully • " +
+                hrData.length +
+                " records";
+
+            addMessage(
+                "✅ <b>HR CSV loaded successfully!</b><br><br>" +
+                "📊 Total records found: <b>" +
+                hrData.length +
+                "</b><br><br>" +
+                "You can now ask questions about your HR data.",
+                "bot"
+            );
+
+        }
+
+        catch(error){
+
+            csvLoaded = false;
+
+            document.getElementById("status").innerHTML =
+                "🔴 Could not read CSV";
+
+            addMessage(
+                "❌ <b>CSV Error</b><br><br>" +
+                "Please check that your CSV file is valid.",
+                "bot"
+            );
+
+        }
+
+    };
+
+    reader.readAsText(file);
+
+});
+
+
+/* =========================================================
+   ROBUST CSV PARSER
+   Handles commas inside quoted values
+========================================================= */
+
+function parseCSV(text){
+
+    const rows = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for(let i = 0; i < text.length; i++){
+
+        const char = text[i];
+
+        const next = text[i + 1];
+
+
+        if(char === '"' && insideQuotes && next === '"'){
+
+            value += '"';
+
+            i++;
+
+        }
+
+        else if(char === '"'){
+
+            insideQuotes = !insideQuotes;
+
+        }
+
+        else if(char === ',' && !insideQuotes){
+
+            row.push(value);
+
+            value = "";
+
+        }
+
+        else if((char === '\n' || char === '\r') && !insideQuotes){
+
+            if(char === '\r' && next === '\n'){
+
+                i++;
+
+            }
+
+            row.push(value);
+
+            value = "";
+
+            if(row.some(cell => cell.trim() !== "")){
+
+                rows.push(row);
+
+            }
+
+            row = [];
+
+        }
+
+        else{
+
+            value += char;
+
+        }
+
+    }
+
+
+    if(value !== "" || row.length > 0){
+
+        row.push(value);
+
+        if(row.some(cell => cell.trim() !== "")){
+
+            rows.push(row);
+
+        }
+
+    }
+
+
+    if(rows.length < 2){
+
+        return [];
+
+    }
+
+
+    const headerRow = rows[0].map(cleanText);
+
+    const data = [];
+
+
+    for(let i = 1; i < rows.length; i++){
+
+        const obj = {};
+
+        for(let j = 0; j < headerRow.length; j++){
+
+            obj[headerRow[j]] =
+                rows[i][j] !== undefined
+                ? cleanText(rows[i][j])
+                : "";
+
+        }
+
+        data.push(obj);
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   CLEAN TEXT
+========================================================= */
+
+function cleanText(value){
+
+    return String(value)
+        .replace(/^\uFEFF/, "")
+        .trim()
+        .replace(/^"(.*)"$/,"$1")
+        .trim();
+
+}
+
+
+/* =========================================================
+   FIND COLUMN
+   Case-insensitive
+========================================================= */
+
+function findColumn(possibleNames){
+
+    for(const name of possibleNames){
+
+        const found = headers.find(
+            h => h.toLowerCase() === name.toLowerCase()
+        );
+
+        if(found){
+
+            return found;
+
+        }
+
+    }
+
+
+    // Partial match
+
+    for(const name of possibleNames){
+
+        const found = headers.find(
+            h => h.toLowerCase().includes(name.toLowerCase())
+        );
+
+        if(found){
+
+            return found;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   NUMBER CONVERSION
+========================================================= */
+
+function toNumber(value){
+
+    if(value === null || value === undefined){
+
+        return NaN;
+
+    }
+
+    const cleaned =
+        String(value)
+        .replace(/₹/g,"")
+        .replace(/,/g,"")
+        .replace(/%/g,"")
+        .trim();
+
+    return Number(cleaned);
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+function sendMessage(){
+
+    const input =
+        document.getElementById("question");
+
+    const question =
+        input.value.trim();
+
+
+    if(question === ""){
+
+        return;
+
+    }
+
+
+    addMessage(question,"user");
+
+    input.value = "";
+
+
+    setTimeout(function(){
+
+        const answer =
+            getHRAnswer(question);
+
+        addMessage(answer,"bot");
+
+    },300);
+
+}
+
+
+/* =========================================================
+   QUICK QUESTION
+========================================================= */
+
+function askQuestion(question){
+
+    document.getElementById("question").value =
+        question;
+
+    sendMessage();
+
+}
+
+
+/* =========================================================
+   ADD CHAT MESSAGE
+========================================================= */
+
+function addMessage(text,type){
+
+    const chatArea =
+        document.getElementById("chatArea");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+    message.innerHTML = text;
+
+    chatArea.appendChild(message);
+
+    chatArea.scrollTop =
+        chatArea.scrollHeight;
+
+}
+
+
+/* =========================================================
+   MAIN HR ANSWER ENGINE
+========================================================= */
+
+function getHRAnswer(question){
+
+    if(!csvLoaded){
+
+        return `
+        ⚠️ <b>Please upload your HR CSV file first.</b>
+        `;
+
+    }
+
+
+    const q =
+        question
+        .toLowerCase()
+        .trim();
+
+
+    /* =====================================================
+       TOTAL EMPLOYEES
+    ===================================================== */
+
+    if(
+        q.includes("total employee") ||
+        q.includes("employee count") ||
+        q.includes("employees kitne") ||
+        q.includes("how many employees")
+    ){
+
+        return `
+        👥 <b>Total Employees</b><br><br>
+
+        <b>${hrData.length}</b> employees
+        `;
+
+    }
+
+
+    /* =====================================================
+       ATTRITION COUNT
+    ===================================================== */
+
+    if(
+        q.includes("employees left") ||
+        q.includes("how many left") ||
+        q.includes("left the company") ||
+        q.includes("attrition count")
+    ){
+
+        const attritionColumn =
+            findColumn(["Attrition"]);
+
+
+        if(!attritionColumn){
+
+            return "⚠️ Attrition column not found.";
+
+        }
+
+
+        const left =
+            hrData.filter(row =>
+                String(row[attritionColumn])
+                .toLowerCase()
+                .trim() === "yes"
+            ).length;
+
+
+        return `
+        📊 <b>Employees Who Left</b><br><br>
+
+        <b>${left}</b> employees
+        `;
+
+    }
+
+
+    /* =====================================================
+       ATTRITION RATE
+    ===================================================== */
+
+    if(q.includes("attrition")){
+
+        const attritionColumn =
+            findColumn(["Attrition"]);
+
+
+        if(!attritionColumn){
+
+            return "⚠️ Attrition column not found.";
+
+        }
+
+
+        const left =
+            hrData.filter(row =>
+                String(row[attritionColumn])
+                .toLowerCase()
+                .trim() === "yes"
+            ).length;
+
+
+        const rate =
+            (left / hrData.length) * 100;
+
+
+        return `
+        📊 <b>Attrition Analysis</b><br><br>
+
+        Employees Left:
+        <b>${left}</b><br><br>
+
+        Attrition Rate:
+        <b>${rate.toFixed(2)}%</b>
+        `;
+
+    }
+
+
+    /* =====================================================
+       AVERAGE AGE
+    ===================================================== */
+
+    if(
+        q.includes("average age") ||
+        q.includes("avg age")
+    ){
+
+        const ageColumn =
+            findColumn(["Age"]);
+
+
+        if(!ageColumn){
+
+            return "⚠️ Age column not found.";
+
+        }
+
+
+        const values =
+            hrData
+            .map(row => toNumber(row[ageColumn]))
+            .filter(n => !isNaN(n));
+
+
+        if(values.length === 0){
+
+            return "⚠️ No valid age values found.";
+
+        }
+
+
+        const average =
+            values.reduce((a,b)=>a+b,0)
+            / values.length;
+
+
+        return `
+        🎂 <b>Average Age</b><br><br>
+
+        <b>${average.toFixed(2)} years</b>
+        `;
+
+    }
+
+
+    /* =====================================================
+       AVERAGE MONTHLY INCOME
+    ===================================================== */
+
+    if(
+        q.includes("average salary") ||
+        q.includes("average income") ||
+        q.includes("average monthly income") ||
+        q.includes("avg salary")
+    ){
+
+        const incomeColumn =
+            findColumn([
+                "MonthlyIncome",
+                "Monthly Income",
+                "Salary"
+            ]);
+
+
+        if(!incomeColumn){
+
+            return "⚠️ MonthlyIncome/Salary column not found.";
+
+        }
+
+
+        const values =
+            hrData
+            .map(row => toNumber(row[incomeColumn]))
+            .filter(n => !isNaN(n));
+
+
+        if(values.length === 0){
+
+            return "⚠️ No valid income values found.";
+
+        }
+
+
+        const average =
+            values.reduce((a,b)=>a+b,0)
+            / values.length;
+
+
+        return `
+        💰 <b>Average Monthly Income</b><br><br>
+
+        ₹${average.toFixed(2)}
+        `;
+
+    }
+
+
+    /* =====================================================
+       DEPARTMENT-WISE EMPLOYEES
+    ===================================================== */
+
+    if(
+        q.includes("department") &&
+        (
+            q.includes("employee") ||
+            q.includes("count") ||
+            q.includes("wise") ||
+            q.includes("how many")
+        )
+    ){
+
+        const departmentColumn =
+            findColumn(["Department"]);
+
+
+        if(!departmentColumn){
+
+            return "⚠️ Department column not found.";
+
+        }
+
+
+        const departments = {};
+
+
+        hrData.forEach(row => {
+
+            const department =
+                row[departmentColumn];
+
+
+            if(department){
+
+                departments[department] =
+                    (departments[department] || 0) + 1;
+
+            }
+
+        });
+
+
+        let result =
+            `🏢 <b>Department-wise Employees</b><br><br>`;
+
+
+        Object.entries(departments)
+        .sort((a,b)=>b[1]-a[1])
+        .forEach(([department,count])=>{
+
+            result +=
+                `${department}: <b>${count}</b><br>`;
+
+        });
+
+
+        return result;
+
+    }
+
+
+    /* =====================================================
+       HIGHEST EMPLOYEE DEPARTMENT
+    ===================================================== */
+
+    if(
+        q.includes("highest employee") ||
+        q.includes("most employees") ||
+        q.includes("maximum employees")
+    ){
+
+        const departmentColumn =
+            findColumn(["Department"]);
+
+
+        if(!departmentColumn){
+
+            return "⚠️ Department column not found.";
+
+        }
+
+
+        const departments = {};
+
+
+        hrData.forEach(row => {
+
+            const department =
+                row[departmentColumn];
+
+
+            if(department){
+
+                departments[department] =
+                    (departments[department] || 0) + 1;
+
+            }
+
+        });
+
+
+        const highest =
+            Object.entries(departments)
+            .sort((a,b)=>b[1]-a[1])[0];
+
+
+        if(!highest){
+
+            return "⚠️ Department data not available.";
+
+        }
+
+
+        return `
+        🏆 <b>Department with Highest Employee Count</b><br><br>
+
+        ${highest[0]}<br>
+
+        Employees:
+        <b>${highest[1]}</b>
+        `;
+
+    }
+
+
+    /* =====================================================
+       HIGHEST ATTRITION DEPARTMENT
+    ===================================================== */
+
+    if(
+        q.includes("highest attrition department") ||
+        q.includes("department highest attrition") ||
+        q.includes("highest attrition")
+    ){
+
+        const departmentColumn =
+            findColumn(["Department"]);
+
+        const attritionColumn =
+            findColumn(["Attrition"]);
+
+
+        if(!departmentColumn || !attritionColumn){
+
+            return `
+            ⚠️ Department or Attrition column not found.
+            `;
+
+        }
+
+
+        const departments = {};
+
+
+        hrData.forEach(row => {
+
+            const department =
+                row[departmentColumn];
+
+            const attrition =
+                String(row[attritionColumn])
+                .toLowerCase()
+                .trim();
+
+
+            if(
+                department &&
+                attrition === "yes"
+            ){
+
+                departments[department] =
+                    (departments[department] || 0) + 1;
+
+            }
+
+        });
+
+
+        const highest =
+            Object.entries(departments)
+            .sort((a,b)=>b[1]-a[1])[0];
+
+
+        if(!highest){
+
+            return `
+            ⚠️ No attrition data available.
+            `;
+
+        }
+
+
+        return `
+        🏆 <b>Highest Attrition Department</b><br><br>
+
+        Department:
+        <b>${highest[0]}</b><br><br>
+
+        Employees Left:
+        <b>${highest[1]}</b>
+        `;
+
+    }
+
+
+    /* =====================================================
+       GENDER COUNT
+    ===================================================== */
+
+    if(
+        q.includes("female") ||
+        q.includes("male")
+    ){
+
+        const genderColumn =
+            findColumn(["Gender"]);
+
+
+        if(!genderColumn){
+
+            return "⚠️ Gender column not found.";
+
+        }
+
+
+        let target = "";
+
+
+        if(q.includes("female")){
+
+            target = "female";
+
+        }
+
+        else{
+
+            target = "male";
+
+        }
+
+
+        const count =
+            hrData.filter(row =>
+                String(row[genderColumn])
+                .toLowerCase()
+                .trim() === target
+            ).length;
+
+
+        return `
+        👤 <b>${target.toUpperCase()} Employees</b><br><br>
+
+        <b>${count}</b> employees
+        `;
+
+    }
+
+
+    /* =====================================================
+       JOB ROLE-WISE
+    ===================================================== */
+
+    if(
+        q.includes("job role") ||
+        q.includes("jobrole")
+    ){
+
+        const roleColumn =
+            findColumn([
+                "JobRole",
+                "Job Role"
+            ]);
+
+
+        if(!roleColumn){
+
+            return "⚠️ JobRole column not found.";
+
+        }
+
+
+        const roles = {};
+
+
+        hrData.forEach(row => {
+
+            const role =
+                row[roleColumn];
+
+
+            if(role){
+
+                roles[role] =
+                    (roles[role] || 0) + 1;
+
+            }
+
+        });
+
+
+        let result =
+            `💼 <b>Job Role-wise Employees</b><br><br>`;
+
+
+        Object.entries(roles)
+        .sort((a,b)=>b[1]-a[1])
+        .forEach(([role,count])=>{
+
+            result +=
+                `${role}: <b>${count}</b><br>`;
+
+        });
+
+
+        return result;
+
+    }
+
+
+    /* =====================================================
+       OVERTIME
+    ===================================================== */
+
+    if(q.includes("overtime")){
+
+        const overtimeColumn =
+            findColumn(["OverTime","Overtime"]);
+
+
+        if(!overtimeColumn){
+
+            return "⚠️ OverTime column not found.";
+
+        }
+
+
+        const yes =
+            hrData.filter(row =>
+                String(row[overtimeColumn])
+                .toLowerCase()
+                .trim() === "yes"
+            ).length;
+
+
+        const percentage =
+            (yes / hrData.length) * 100;
+
+
+        return `
+        ⏰ <b>Overtime Analysis</b><br><br>
+
+        Overtime Employees:
+        <b>${yes}</b><br><br>
+
+        Percentage:
+        <b>${percentage.toFixed(2)}%</b>
+        `;
+
+    }
+
+
+    /* =====================================================
+       UNKNOWN QUESTION
+    ===================================================== */
+
+    return `
+    ⚠️ <b>I couldn't understand that HR question.</b>
+    <br><br>
+
+    Try asking:
+    <br><br>
+
+    • Total employees?<br>
+    • Attrition rate?<br>
+    • Employees who left?<br>
+    • Average age?<br>
+    • Average monthly income?<br>
+    • Department-wise employees?<br>
+    • Highest attrition department?<br>
+    • Job-role wise employees?<br>
+    • Male employees?<br>
+    • Female employees?<br>
+    • Overtime employees?
+    `;
+
+}
+
+</script>
+
+
+</body></html>
